@@ -77,15 +77,19 @@ class KNNConvBlock(nn.Module):
         z_points = unfold_pre_inputs[:, None, 2*self.knn_nr:3*self.knn_nr, :]
         xyz_points = torch.cat((x_points, y_points, z_points), 1)
         d = xyz_points - anchors
+        # print(d.shape)
 
         # convert d vectors to spherical system
         x_points = d[:, 0, :, :].unsqueeze(dim=1)
         y_points = d[:, 1, :, :].unsqueeze(dim=1)
         z_points = d[:, 2, :, :].unsqueeze(dim=1)
         xy = x_points**2 + y_points**2
-        d[:, 0, :, :] = torch.sqrt(xy + z_points**2)
-        d[:, 1, :, :] = torch.arctan2(torch.sqrt(xy), z_points**2) # elevation angle defined from Z-axis down
-        d[:, 2, :, :] = torch.arctan2(y_points**2, x_points**2)
+        # print(xy.shape)
+        # print(z_points.shape)
+        # print(torch.sqrt(xy + z_points**2).shape)
+        d[:, 0, :, :] = torch.sqrt(xy + z_points**2).squeeze(1)
+        d[:, 1, :, :] = torch.arctan2(torch.sqrt(xy), z_points**2).squeeze(1) # elevation angle defined from Z-axis down
+        d[:, 2, :, :] = torch.arctan2(y_points**2, x_points**2).squeeze(1)
 
         d = torch.flatten(d, start_dim=1, end_dim=2)
         unfold_pre_inputs = d

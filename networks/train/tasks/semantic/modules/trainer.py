@@ -8,6 +8,7 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
+import tqdm
 
 import torch.optim as optim
 from matplotlib import pyplot as plt
@@ -136,6 +137,7 @@ class Trainer():
             self.gpu = True
             self.n_gpus = 1
             self.model.cuda()
+            pass
         if torch.cuda.is_available() and torch.cuda.device_count() > 1:
             print("Let's use", torch.cuda.device_count(), "GPUs!")
             self.model = nn.DataParallel(self.model)  # spread in gpus
@@ -295,6 +297,7 @@ class Trainer():
             if epoch % self.ARCH["train"]["report_epoch"] == 0:
                 # evaluate on validation set
                 print("*" * 80)
+                print("validating")
                 acc, iou, loss, rand_img,hetero_l = self.validate(val_loader=self.parser.get_valid_set(),
                                                          model=self.model,
                                                          criterion=self.criterion,
@@ -349,7 +352,7 @@ class Trainer():
 
         # empty the cache to train now
         if self.gpu:
-            torch.cuda.empty_cache()
+            pass
 
         # switch to train mode
         model.train()
@@ -471,7 +474,7 @@ class Trainer():
 
         # empty the cache to infer in high res
         if self.gpu:
-            torch.cuda.empty_cache()
+            pass
 
         with torch.no_grad():
             end = time.time()
@@ -511,7 +514,9 @@ class Trainer():
                     rand_imgs.append(out)
 
                 # measure elapsed time
-                self.batch_time_e.update(time.time() - end)
+                elapsed_time = time.time() - end
+                self.batch_time_e.update(elapsed_time)
+                print(f"Validation [{i}] iter : {elapsed_time}[sec]")
                 end = time.time()
 
             accuracy = evaluator.getacc()
