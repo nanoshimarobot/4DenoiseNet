@@ -3,8 +3,8 @@
 import argparse
 import os
 import yaml
-from laserscan import LaserScan, SemLaserScan
-from laserscanvis import LaserScanVis
+from .laserscan import LaserScan, SemLaserScan
+from .laserscanvis import LaserScanVis
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser("./visualize.py")
