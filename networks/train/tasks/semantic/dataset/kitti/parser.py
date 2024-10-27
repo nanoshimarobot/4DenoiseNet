@@ -2,7 +2,9 @@ import os
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-from common.laserscan import LaserScan, SemLaserScan
+import sys
+# sys.path.append("../../../../../")
+from .....common.laserscan import LaserScan, SemLaserScan
 import torchvision
 
 import torch
@@ -20,7 +22,7 @@ from collections.abc import Sequence, Iterable
 import warnings
 import time
 
-from dataset.kitti.utils import load_poses, load_calib
+from .utils import load_poses, load_calib
 
 EXTENSIONS_SCAN = ['.bin']
 EXTENSIONS_LABEL = ['.label']

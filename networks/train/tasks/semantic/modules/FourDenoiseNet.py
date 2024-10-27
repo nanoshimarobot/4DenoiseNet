@@ -2,8 +2,9 @@
 # This file is covered by the LICENSE file in the root of this project.
 import imp
 from traceback import print_tb
-
-import __init__ as booger
+# import sys
+# sys.path.append("../")
+# import __init__ as booger
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
